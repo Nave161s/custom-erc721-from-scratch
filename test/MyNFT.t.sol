@@ -36,4 +36,18 @@ contract MyNFTTest is Test {
         vm.expectRevert("Not the owner");
         nft.mint("ipfs://QmHackerLink");
     }
+
+    // A dummy contract that does NOT implement onERC721Received
+
+        function test_RevertWhen_SafeTransferToBadContract() public {
+        nft.mint("ipfs://test");
+        BadReceiver badReceiver = new BadReceiver();
+
+        vm.expectRevert();
+        nft.safeTransferFrom(address(this), address(badReceiver), 1);
+    }
+}
+
+contract BadReceiver {
+
 }
